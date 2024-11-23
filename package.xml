@@ -5,7 +5,7 @@
   <version>0.0.0</version>
   <description>Package to implement simple walker algorithm</description>
   <maintainer email="koustubh1012@gmail.com">koustubh</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
