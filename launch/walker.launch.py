@@ -27,7 +27,7 @@ def generate_launch_description():
         if LaunchConfiguration('record_bag').perform(context) == 'true':
             return [
                 ExecuteProcess(
-                    cmd=['ros2', 'bag', 'record', '--all'],
+                    cmd=['ros2', 'bag', 'record', '-a', '-x', '/camera/.*'],
                     output='screen',
                     cwd='src/walker/bag_files'  # Set the working directory
                 )
