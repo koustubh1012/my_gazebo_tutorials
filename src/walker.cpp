@@ -10,9 +10,9 @@
  */
 #include "walker/walker.hpp"
 
-#define MAX_FORWARD_SPEED 0.3
-#define MAX_ROTATION_SPEED 0.3
-#define DISTANCE_THRESHOLD 0.6
+#define MAX_FORWARD_SPEED 0.2
+#define MAX_ROTATION_SPEED 0.4
+#define DISTANCE_THRESHOLD 0.8
 
 // Walker class definition
 Walker::Walker() : Node("walker") {
