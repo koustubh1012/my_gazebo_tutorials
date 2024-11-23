@@ -11,7 +11,8 @@
 class Walker;
 
 class RobotState {
-    virtual void execute() = 0;
+    public:
+        virtual void execute(Walker &context, float min_distance) = 0;
 };
 
 class MovingForward : public RobotState {
@@ -31,7 +32,7 @@ public:
     Walker();
     void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg);
     void changeState(std::shared_ptr<RobotState> new_state);
-    rcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr subscription_;
     std::string current_state_;
     std::string previous_state_;
