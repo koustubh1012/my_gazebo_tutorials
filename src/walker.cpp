@@ -12,7 +12,8 @@
 
 #define MAX_FORWARD_SPEED 0.2
 #define MAX_ROTATION_SPEED 0.4
-#define DISTANCE_THRESHOLD 0.8
+#define DISTANCE_THRESHOLD 0.7
+#define ROTATION_DISTANCE_THRESHOLD 1.4
 
 // Walker class definition
 Walker::Walker() : Node("walker") {
@@ -36,8 +37,8 @@ Walker::Walker() : Node("walker") {
 // Callback function to process LaserScan messages
 void Walker::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) {
   // Define the forward range of the robot
-  const double forward_min_angle = -M_PI / 5;
-  const double forward_max_angle = M_PI / 5;
+  const double forward_min_angle = -M_PI / 3;
+  const double forward_max_angle = M_PI / 3;
 
   // Initialize the minimum distance to infinity
   float min_distance = std::numeric_limits<float>::infinity();
@@ -52,14 +53,23 @@ void Walker::scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg) {
       }
     }
   }
-
   state_->execute(*this, min_distance);
+}
+
+std::string Walker::demangle(const char *name) {
+  int status;
+  char *demangled_name = abi::__cxa_demangle(name, 0, 0, &status);
+  if (status == 0) {
+    return std::string(demangled_name);
+  } else {
+    return std::string(name);
+  }
 }
 
 // Function to change the state of the robot
 void Walker::changeState(std::shared_ptr<RobotState> new_state) {
   previous_state_ = current_state_;
-  current_state_ = typeid(new_state).name();
+  current_state_ = demangle(typeid(*new_state).name());
   state_ = new_state;
   RCLCPP_INFO(this->get_logger(), "State changed from %s to %s",
               previous_state_.c_str(), current_state_.c_str());
@@ -90,7 +100,7 @@ void MovingForward::execute(Walker &context, float min_distance) {
 // Implement the execute function for rotating clockwise state
 void RotatingClockwise::execute(Walker &context, float min_distance) {
   // Check if the minimum distance is greater than the threshold
-  if (min_distance > DISTANCE_THRESHOLD) {
+  if (min_distance > ROTATION_DISTANCE_THRESHOLD) {
     // change the state to moving forward
     context.changeState(std::make_shared<MovingForward>());
   } else {
@@ -104,7 +114,7 @@ void RotatingClockwise::execute(Walker &context, float min_distance) {
 // Implement the execute function for rotating counter clockwise state
 void RotatingCounterClockwise::execute(Walker &context, float min_distance) {
   // Check if the minimum distance is greater than the threshold
-  if (min_distance > DISTANCE_THRESHOLD) {
+  if (min_distance > ROTATION_DISTANCE_THRESHOLD) {
     // change the state to moving forward
     context.changeState(std::make_shared<MovingForward>());
   } else {

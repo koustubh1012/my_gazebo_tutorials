@@ -17,6 +17,7 @@
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
+#include <cxxabi.h>
 
 // Forward declaration of Walker class
 class Walker;
@@ -66,6 +67,8 @@ class Walker : public rclcpp::Node {
   void scanCallback(const sensor_msgs::msg::LaserScan::SharedPtr msg);
   // Function to change the state of the robot
   void changeState(std::shared_ptr<RobotState> new_state);
+  // Function to demangle the type name
+  std::string demangle(const char *name);
   // create a publisher to publish the velocity commands
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;
   // create a subscription to subscribe to the laser scan data
