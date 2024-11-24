@@ -1,0 +1,3 @@
+koustubh@kstb:~/ENPM700_ws/src/walker$ clang-tidy -p build/walker --extra-arg=-std=c++17 src/*.cpp
+koustubh@kstb:~/ENPM700_ws/src/walker$ cpplint --filter=-legal/copyright,-build/c++11,+build/c++17,-build/namespaces,-build/include_order $(find . -name *.cpp | grep -v "/build/")
+Done processing ./src/walker.cpp
